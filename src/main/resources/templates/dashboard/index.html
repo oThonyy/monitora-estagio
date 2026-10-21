@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Visão geral')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <div class="mb-4">
+                    <p class="text-uppercase text-secondary small fw-semibold mb-2">Análise do Perfil dos Estudantes</p>
+                    <h1 class="h2">Visão geral</h1>
+                    <p class="text-secondary">Acompanhe os registros</p>
+                </div>
+                <div class="row g-3 mb-5">
+                    <div class="col-sm-6 col-xl-4" th:each="indicador : ${indicadores}">
+                        <div class="card h-100">
+                            <div class="card-body p-4">
+                                <p class="text-secondary mb-2" th:text="${indicador.key}"></p>
+                                <p class="display-6 fw-semibold mb-0" th:text="${indicador.value}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="h5 mb-3">Comece por aqui</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <section class="card h-100">
+                            <div class="card-body p-4">
+                                <h3 class="h5">Alunos e perfis</h3>
+                                <p class="text-secondary">Cadastre os alunos, vincule a um curso e registre o perfil estudantil.</p>
+                                <a class="btn btn-primary" th:href="@{/alunos}">Acessar alunos</a>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section class="card h-100">
+                            <div class="card-body p-4">
+                                <h3 class="h5">Pesquisas de estágio</h3>
+                                <p class="text-secondary">Registre novas coletas e consulte o histórico de respostas de cada estudante.</p>
+                                <a class="btn btn-primary" th:href="@{/pesquisas}">Acessar pesquisas</a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>
