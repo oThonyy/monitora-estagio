@@ -1,0 +1,89 @@
+:root { 
+    --sidebar-width: 260px; 
+}
+
+body { 
+    background: #f5f6f8; color: #252b37; 
+}
+
+.sidebar { 
+    --bs-offcanvas-width: var(--sidebar-width); 
+}
+
+.sidebar .offcanvas-body { 
+    min-height: 100vh; 
+}
+
+.sidebar .nav-link { 
+    color: #cbd1dc; 
+}
+
+.sidebar .nav-link:hover { 
+    color: white; background: #343b48; 
+}
+
+.sidebar .nav-link.active { 
+    color: white; background: #b5283c; 
+}
+
+.brand-mark { 
+    width: 42px; height: 42px; font-size: 1.5rem; 
+}
+
+.app-content { 
+    min-height: 100vh; 
+}
+
+main { 
+    width: 100%; 
+    max-width: 1440px; 
+    margin-inline: auto; 
+}
+
+.card { 
+    border-color: #e3e6eb; 
+}
+
+.table > :not(caption) > * > * { 
+    padding: 1rem; 
+}
+
+.table th { 
+    font-size: .82rem; 
+    color: #626b7c; 
+    background: #f8f9fa; 
+}
+
+.form-label { 
+    font-weight: 500; 
+}
+
+.card-header { 
+    background: white; 
+    padding: 1.25rem; 
+}
+
+dt { 
+    color: #626b7c; 
+    font-weight: 500; 
+}
+
+dd { 
+    overflow-wrap: anywhere; 
+    white-space: pre-line; 
+}
+
+.btn-primary { 
+    --bs-btn-bg: #a82034; 
+    --bs-btn-border-color: #a82034; 
+    --bs-btn-hover-bg: #8d1a2b; 
+    --bs-btn-hover-border-color: #8d1a2b; 
+    --bs-btn-active-bg: #791526; 
+    --bs-btn-active-border-color: #791526; 
+
+}
+
+@media (min-width: 992px) {
+    .sidebar { position: fixed; inset: 0 auto 0 0; width: var(--sidebar-width); overflow-y: auto; }
+    .app-content { margin-left: var(--sidebar-width); }
+}
