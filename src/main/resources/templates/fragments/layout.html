@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head(titulo)">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title th:text="${titulo + ' | Observatório Fatec'}">Estágios Fatec</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/css/app.css}">
+    </head>
+    <body>
+        
+        <aside th:fragment="menu" class="offcanvas-lg offcanvas-start sidebar bg-dark text-white" tabindex="-1" id="menuLateral" aria-labelledby="menuTitulo">
+            <div class="offcanvas-header border-bottom border-secondary">
+                <h2 class="offcanvas-title fs-5" id="menuTitulo">Estágios Fatec</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#menuLateral" aria-label="Fechar menu"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column p-4">
+                <a class="text-white text-decoration-none mb-4" th:href="@{/}">
+                    <span class="brand-mark d-inline-flex rounded-3 bg-danger fw-bold align-items-center justify-content-center mb-3">F</span>
+                    <span class="d-block fs-5 fw-semibold">Estágios Fatec</span>
+                    <span class="small text-white-50">Perfil acadêmico e estágio</span>
+                </a>
+                <span class="small text-uppercase text-white-50 mb-2">Área de pesquisa</span>
+                <nav class="nav nav-pills flex-column gap-2" aria-label="Navegação principal">
+                    <a class="nav-link" th:classappend="${modulo == 'dashboard'} ? 'active'" th:href="@{/}" th:attr="aria-current=${modulo == 'dashboard' ? 'page' : null}">Visão geral</a>
+                    <a class="nav-link" th:classappend="${modulo == 'alunos'} ? 'active'" th:href="@{/alunos}" th:attr="aria-current=${modulo == 'alunos' ? 'page' : null}">Alunos e perfis</a>
+                    <a class="nav-link" th:classappend="${modulo == 'pesquisas'} ? 'active'" th:href="@{/pesquisas}" th:attr="aria-current=${modulo == 'pesquisas' ? 'page' : null}">Pesquisas de estágio</a>
+                </nav>
+                <div class="mt-4 pt-4 border-top border-secondary">
+                    <span class="small text-uppercase text-white-50">Cadastros institucionais</span>
+                    <nav class="nav nav-pills flex-column gap-2 mt-2" aria-label="Cadastros institucionais">
+                        <a class="nav-link" th:classappend="${modulo == 'unidades'} ? 'active'" th:href="@{/unidades}" th:attr="aria-current=${modulo == 'unidades' ? 'page' : null}">Unidades Fatec</a>
+                        <a class="nav-link" th:classappend="${modulo == 'cursos'} ? 'active'" th:href="@{/cursos}" th:attr="aria-current=${modulo == 'cursos' ? 'page' : null}">Cursos</a>
+                    </nav>
+                </div>
+                <div class="mt-4 pt-4 border-top border-secondary">
+                    <span class="small text-uppercase text-white-50">Empresas e estágios</span>
+                    <nav class="nav nav-pills flex-column gap-2 mt-2" aria-label="Empresas e estágios">
+                        <a class="nav-link" th:classappend="${modulo == 'empresas'} ? 'active'" th:href="@{/empresas}" th:attr="aria-current=${modulo == 'empresas' ? 'page' : null}">Empresas</a>
+                        <a class="nav-link" th:classappend="${modulo == 'contratos'} ? 'active'" th:href="@{/contratos}" th:attr="aria-current=${modulo == 'contratos' ? 'page' : null}">Contratos de estágio</a>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+
+        <header th:fragment="cabecalho" class="bg-white border-bottom px-3 px-md-4 py-3 d-flex align-items-center gap-3">
+            <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuLateral" aria-controls="menuLateral" aria-label="Abrir menu">Menu</button>
+            <span class="fw-semibold">Pesquisa e acompanhamento estudantil</span>
+            <span class="badge text-bg-light border ms-auto d-none d-sm-inline pa">Fatec</span>
+        </header>
+
+        <div th:fragment="mensagens" aria-live="polite">
+            <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="status">
+                <span th:text="${sucesso}"></span><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar mensagem"></button>
+            </div>
+            <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+        </div>
+
+        <div th:fragment="erros" th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">
+            <p class="fw-semibold mb-2">Revise os dados antes de continuar.</p>
+            <ul class="mb-0"><li th:each="erro : ${#fields.allErrors()}" th:text="${erro}"></li></ul>
+        </div>
+
+        <footer th:fragment="rodape" class="border-top px-4 py-3 text-secondary small mt-auto">Estágios Fatec · Perfil acadêmico e estágio</footer>
+
+        <th:block th:fragment="scripts">
+            <div class="modal fade" id="confirmarExclusao" tabindex="-1" aria-labelledby="exclusaoTitulo" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+                    <div class="modal-header"><h2 class="modal-title fs-5" id="exclusaoTitulo">Confirmar exclusão</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+                    <div class="modal-body"><p id="exclusaoTexto" class="mb-0"></p></div>
+                    <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button><button type="button" class="btn btn-danger" id="exclusaoConfirmar">Excluir registro</button></div>
+                </div></div>
+            </div>
+            <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+            <script th:src="@{/js/app.js}"></script>
+        </th:block>
+
+    </body>
+</html>
