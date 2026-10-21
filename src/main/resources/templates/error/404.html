@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Registro não encontrado')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <section class="card">
+                    <div class="card-body p-5">
+                        <p class="text-secondary">404</p>
+                        <h1 class="h3">Registro não encontrado</h1>
+                        <p>O endereço não existe ou o registro foi removido.</p>
+                        <a class="btn btn-primary" th:href="@{/}">Voltar ao início</a>
+                    </div>
+                </section>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>
