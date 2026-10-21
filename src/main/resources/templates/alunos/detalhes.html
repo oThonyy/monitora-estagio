@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Detalhes do aluno')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <a class="text-secondary d-inline-block mb-3" th:href="@{/alunos}">Voltar aos alunos</a>
+                <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+                    <div>
+                        <p class="text-secondary mb-1">Dados do estudante</p>
+                        <h1 class="h2" th:text="${aluno.nome}"></h1>
+                    </div>
+                    <a class="btn btn-primary align-self-start" th:href="@{/alunos/{id}/editar(id=${aluno.idAluno})}">Editar aluno</a>
+                </div>
+                <div class="row g-4">
+                    <div class="col-xl-7">
+                        <section class="card h-100">
+                            <div class="card-header">
+                                <h2 class="h5 mb-0">Cadastro e vínculo acadêmico</h2>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4 mb-2">RA</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.ra ?: 'Não informado'}"></dd>
+                                    <dt class="col-sm-4 mb-2">Unidade</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.ofertaCurso.unidadeFatec.nomeUnidade}"></dd>
+                                    <dt class="col-sm-4 mb-2">Curso</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.ofertaCurso.curso.nomeCurso}"></dd>
+                                    <dt class="col-sm-4 mb-2">Turno</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.ofertaCurso.turno}"></dd>
+                                    <dt class="col-sm-4 mb-2">Duração prevista</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.ofertaCurso.duracao + ' semestres'}"></dd>
+                                    <dt class="col-sm-4 mb-2">Data de nascimento</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.dataNascimento == null ? 'Não informada' : #temporals.format(aluno.dataNascimento, 'dd/MM/yyyy')}"></dd>
+                                    <dt class="col-sm-4 mb-2">Gênero</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.genero ?: 'Não informado'}"></dd>
+                                    <dt class="col-sm-4 mb-2">Etnia</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.etnia ?: 'Não informada'}"></dd>
+                                    <dt class="col-sm-4 mb-2">Endereço</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.endereco ?: 'Não informado'}"></dd>
+                                    <dt class="col-sm-4 mb-2">Pessoa com deficiência</dt>
+                                    <dd class="col-sm-8" th:text="${aluno.pcd ? 'Sim' : 'Não'}"></dd>
+                                </dl>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-xl-5">
+                        <section class="card h-100">
+                            <div class="card-header">
+                                <h2 class="h5 mb-0">Perfil estudantil</h2>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${aluno.perfilEstudantil != null}">
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-4 mb-2">Tentativas de ingresso</dt>
+                                        <dd class="col-sm-8" th:text="${aluno.perfilEstudantil.quantidadeTentativa ?: 'Não informado'}"></dd>
+                                        <dt class="col-sm-4 mb-2">Realizou cursinho</dt>
+                                        <dd class="col-sm-8" th:text="${aluno.perfilEstudantil.realizouCursinho == null ? 'Não informado' : (aluno.perfilEstudantil.realizouCursinho ? 'Sim' : 'Não')}"></dd>
+                                        <dt class="col-sm-4 mb-2">Escola de origem</dt>
+                                        <dd class="col-sm-8" th:text="${aluno.perfilEstudantil.tipoEscola ?: 'Não informada'}"></dd>
+                                        <dt class="col-sm-4 mb-2">Como soube do vestibular</dt>
+                                        <dd class="col-sm-8" th:text="${aluno.perfilEstudantil.cienciaVestibular ?: 'Não informado'}"></dd>
+                                        <dt class="col-sm-4 mb-2">Renda familiar</dt>
+                                        <dd class="col-sm-8" th:text="${aluno.perfilEstudantil.faixaRendaFamiliar ?: 'Não informada'}"></dd>
+                                        <dt class="col-sm-4 mb-2">Contribuição na renda</dt>
+                                        <dd class="col-sm-8" th:text="${aluno.perfilEstudantil.contribuicaoRendaFamiliar ?: 'Não informada'}"></dd>
+                                    </dl>
+                                </div>
+                                <div th:if="${aluno.perfilEstudantil == null}">
+                                    <p class="text-secondary">O perfil estudantil ainda não foi preenchido.</p>
+                                    <a th:href="@{/alunos/{id}/editar(id=${aluno.idAluno})}" class="btn btn-outline-secondary">Preencher perfil</a>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <section class="card mt-4" id="acompanhamentos">
+                    <div class="card-header">
+                        <h2 class="h5 mb-0">Acompanhamento acadêmico</h2>
+                    </div>
+                    <div class="card-body" th:if="${#lists.isEmpty(acompanhamentos)}">
+                        <p class="text-secondary">Este aluno ainda não possui acompanhamento acadêmico. Preencha os dados na edição do cadastro.</p>
+                        <a class="btn btn-outline-primary" th:href="@{/alunos/{id}/editar(id=${aluno.idAluno})}">Cadastrar acompanhamento</a>
+                    </div>
+                    <div class="table-responsive" th:unless="${#lists.isEmpty(acompanhamentos)}">
+                        <table class="table align-middle mb-0">
+                            <caption class="visually-hidden">Histórico de acompanhamento acadêmico por semestre do curso</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Semestre do curso</th>
+                                    <th scope="col">Disciplinas cursadas</th>
+                                    <th scope="col">Disciplinas trancadas</th>
+                                    <th scope="col">Trancamentos do curso acumulados</th>
+                                    <th scope="col">Pretende trancar?</th>
+                                    <th scope="col">Observações</th>
+                                    <th scope="col">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="acompanhamento : ${acompanhamentos}">
+                                    <td class="text-nowrap" th:text="${acompanhamento.periodoLetivo.matches('[1-9][0-9]*') ? acompanhamento.periodoLetivo + 'º semestre' : 'Semestre a informar'}"></td>
+                                    <td th:text="${acompanhamento.quantidadeDisciplinaCursada}"></td>
+                                    <td th:text="${acompanhamento.quantidadeDisciplinaTrancada}"></td>
+                                    <td th:text="${acompanhamento.quantidadeTrancamentoCurso == null ? 'Não informado' : acompanhamento.quantidadeTrancamentoCurso}"></td>
+                                    <td th:text="${acompanhamento.intencaoTrancarCurso == null ? 'Não informado' : (acompanhamento.intencaoTrancarCurso ? 'Sim' : 'Não')}"></td>
+                                    <td class="text-break" th:text="${acompanhamento.observacaoConciliacao ?: 'Nenhuma observação informada.'}"></td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-secondary" th:href="@{/alunos/{id}/editar(id=${aluno.idAluno},periodo=${acompanhamento.periodoLetivo})}" th:attr="aria-label=${'Editar acompanhamento do semestre do curso'}">Editar</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="card mt-4">
+                    <div class="card-body">
+                        <h2 class="h5">Pesquisas do aluno</h2>
+                        <p class="text-secondary">Consulte as coletas anteriores ou registre uma nova resposta.</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-primary" th:href="@{/pesquisas/nova(aluno=${aluno.idAluno})}">Registrar pesquisa</a>
+                            <a class="btn btn-outline-secondary" th:href="@{/pesquisas(aluno=${aluno.idAluno})}">Consultar histórico</a>
+                        </div>
+                        <p class="small text-secondary mt-3 mb-0">Contratos serão disponibilizados nas próximas etapas.</p>
+                    </div>
+                </section>
+                <form class="mt-4" method="post" th:action="@{/alunos/{id}/excluir(id=${aluno.idAluno})}" data-confirmar="Excluir este aluno e seu perfil estudantil? Esta ação não pode ser desfeita. Alunos com pesquisas, acompanhamentos ou contratos não podem ser excluídos.">
+                    <button class="btn btn-outline-danger" type="submit">Excluir aluno</button>
+                </form>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>

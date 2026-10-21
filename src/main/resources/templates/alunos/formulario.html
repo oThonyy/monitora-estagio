@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Cadastro de aluno')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <a class="text-secondary d-inline-block mb-3" th:href="@{/alunos}">Voltar aos alunos</a>
+                <h1 class="h2" th:text="${id == null ? 'Cadastrar aluno' : 'Editar aluno'}"></h1>
+                <p class="text-secondary mb-4">Preencha os dados do aluno. Os campos com * são obrigatórios.</p>
+                <div th:if="${#lists.isEmpty(ofertas)}" class="alert alert-warning">Nenhuma oferta de curso disponível. Cadastre uma unidade, um curso e uma oferta no banco antes de cadastrar alunos. O módulo institucional será disponibilizado em outra etapa.</div>
+                <form method="post" th:action="${id == null ? '/alunos' : '/alunos/' + id}" th:object="${form}">
+                    <div th:replace="~{fragments/layout :: erros}"></div>
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">1. Dados do aluno</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="nome">Nome completo *</label>
+                                <input class="form-control" id="nome" type="text" th:field="*{nome}" required maxlength="200" autocomplete="name">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="ra">RA</label>
+                                <input class="form-control" id="ra" type="text" th:field="*{ra}" maxlength="20">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('ra')}" th:errors="*{ra}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="idOfertaCurso">Curso *</label>
+                                <select class="form-select" id="idOfertaCurso" th:field="*{idOfertaCurso}" required>
+                                    <option value="">Selecione o curso</option>
+                                    <option th:each="oferta : ${ofertas}" th:value="${oferta.idOfertaCurso}" th:text="${oferta.unidadeFatec.nomeUnidade + ' · ' + oferta.curso.nomeCurso + ' · ' + oferta.turno}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idOfertaCurso')}" th:errors="*{idOfertaCurso}"></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">2. Caracterização pessoal</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="dataNascimento">Data de nascimento</label>
+                                <input class="form-control" id="dataNascimento" type="date" th:field="*{dataNascimento}" >
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="genero">Gênero</label>
+                                <input class="form-control" id="genero" type="text" th:field="*{genero}" maxlength="30">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="etnia">Etnia</label>
+                                <input class="form-control" id="etnia" type="text" th:field="*{etnia}" maxlength="30">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('etnia')}" th:errors="*{etnia}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="endereco">Endereço</label>
+                                <input class="form-control" id="endereco" type="text" th:field="*{endereco}" maxlength="200" autocomplete="street-address">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:field="*{pcd}">
+                                    <label class="form-check-label" for="pcd1">Pessoa com deficiência (PCD)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="card mb-4" id="acompanhamento">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">3. Acompanhamento acadêmico</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <input type="hidden" th:field="*{acompanhamento.periodoOriginal}">
+                            <p class="col-12 text-warning-emphasis mb-0" th:if="${form?.acompanhamento?.periodoOriginal != null}">Informe o semestre do curso deste acompanhamento para concluir a correção do registro anterior.</p>
+                            <p class="col-12 text-secondary mb-0">Informe o semestre que o aluno cursa atualmente, como o 4º semestre de ADS. O acompanhamento é obrigatório.</p>
+                            <p class="col-12 small text-secondary mb-0" th:if="${id != null}">Mantenha o semestre para atualizar seus dados ou informe um novo semestre do curso para registrar a progressão e preservar os anteriores.</p>
+                            <div class="col-md-6">
+                                <label class="form-label" for="periodoLetivo">Semestre atual no curso *</label>
+                                <input class="form-control" id="periodoLetivo" type="number" th:field="*{acompanhamento.periodoLetivo}" required min="1" step="1" placeholder="1" aria-describedby="periodoAjuda">
+                                <div class="form-text" id="periodoAjuda">Informe o número do semestre no curso, de acordo com a duração da oferta selecionada.</div>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('acompanhamento.periodoLetivo')}" th:errors="*{acompanhamento.periodoLetivo}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="quantidadeDisciplinaCursada">Disciplinas cursadas neste semestre *</label>
+                                <input class="form-control" id="quantidadeDisciplinaCursada" type="number" th:field="*{acompanhamento.quantidadeDisciplinaCursada}" required min="0" step="1">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('acompanhamento.quantidadeDisciplinaCursada')}" th:errors="*{acompanhamento.quantidadeDisciplinaCursada}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="quantidadeDisciplinaTrancada">Disciplinas trancadas neste semestre *</label>
+                                <input class="form-control" id="quantidadeDisciplinaTrancada" type="number" th:field="*{acompanhamento.quantidadeDisciplinaTrancada}" required min="0" step="1">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('acompanhamento.quantidadeDisciplinaTrancada')}" th:errors="*{acompanhamento.quantidadeDisciplinaTrancada}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="quantidadeTrancamentoCurso">Total acumulado de trancamentos do curso *</label>
+                                <input class="form-control" id="quantidadeTrancamentoCurso" type="number" th:field="*{acompanhamento.quantidadeTrancamentoCurso}" required min="0" step="1" aria-describedby="trancamentoAjuda">
+                                <div class="form-text" id="trancamentoAjuda">Quantidade de vezes que o aluno trancou o curso até este semestre. Informe zero se nunca trancou.</div>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('acompanhamento.quantidadeTrancamentoCurso')}" th:errors="*{acompanhamento.quantidadeTrancamentoCurso}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="intencaoTrancarCurso">Pretende trancar o curso?</label>
+                                <select class="form-select" id="intencaoTrancarCurso" th:field="*{acompanhamento.intencaoTrancarCurso}">
+                                    <option value="">Não informado</option>
+                                    <option value="true">Sim</option>
+                                    <option value="false">Não</option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('acompanhamento.intencaoTrancarCurso')}" th:errors="*{acompanhamento.intencaoTrancarCurso}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="observacaoConciliacao">Observações sobre conciliação acadêmica</label>
+                                <textarea class="form-control" id="observacaoConciliacao" rows="3" th:field="*{acompanhamento.observacaoConciliacao}" maxlength="200"></textarea>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('acompanhamento.observacaoConciliacao')}" th:errors="*{acompanhamento.observacaoConciliacao}"></div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" th:field="*{incluirPerfil}" id="incluirPerfil">
+                                <label class="form-check-label fw-semibold" for="incluirPerfil">Incluir perfil do estudante</label>
+                            </div>
+                            <p class="text-secondary small mb-0 mt-2">O perfil é opcional e pode ser preenchido depois. Ao desmarcar e salvar, um perfil existente será removido.</p>
+                        </div>
+                    </div>
+                    <div id="camposPerfil">
+                        <section class="card mb-4">
+                            <div class="card-header">
+                                <h2 class="fs-5 mb-0">4. Trajetória de ingresso</h2>
+                            </div>
+                            <div class="card-body row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="quantidadeTentativa">Quantidade de tentativas de ingresso</label>
+                                    <input class="form-control" id="quantidadeTentativa" type="number" th:field="*{quantidadeTentativa}" min="0" step="1">
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('quantidadeTentativa')}" th:errors="*{quantidadeTentativa}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="realizouCursinho">Realizou cursinho?</label>
+                                    <select class="form-select" id="realizouCursinho" th:field="*{realizouCursinho}" >
+                                        <option value="">Não informado</option>
+                                        <option value="true">Sim</option>
+                                        <option value="false">Não</option>
+                                    </select>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('realizouCursinho')}" th:errors="*{realizouCursinho}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="tipoEscola">Modalidade de Ensino</label>
+                                    <select class="form-select" id="tipoEscola" th:field="*{tipoEscola}" >
+                                        <option value="">Não informado</option>
+                                        <option th:each="tipo : ${tiposEscola}" th:value="${tipo}" th:text="${tipo}"></option>
+                                    </select>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('tipoEscola')}" th:errors="*{tipoEscola}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="cienciaVestibular">Como soube do vestibular?</label>
+                                    <textarea class="form-control" rows="3" id="cienciaVestibular" th:field="*{cienciaVestibular}" maxlength="200"></textarea>
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('cienciaVestibular')}" th:errors="*{cienciaVestibular}"></div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="card mb-4">
+                            <div class="card-header">
+                                <h2 class="fs-5 mb-0">5. Condições socioeconômicas</h2>
+                            </div>
+                            <div class="card-body row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="faixaRendaFamiliar">Faixa de renda familiar</label>
+                                    <input class="form-control" id="faixaRendaFamiliar" type="text" th:field="*{faixaRendaFamiliar}" maxlength="50">
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('faixaRendaFamiliar')}" th:errors="*{faixaRendaFamiliar}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="contribuicaoRendaFamiliar">Contribuição para a renda familiar</label>
+                                    <input class="form-control" id="contribuicaoRendaFamiliar" type="text" th:field="*{contribuicaoRendaFamiliar}" maxlength="100">
+                                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('contribuicaoRendaFamiliar')}" th:errors="*{contribuicaoRendaFamiliar}"></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(ofertas)}">Salvar aluno</button>
+                        <a class="btn btn-outline-secondary" th:href="${id == null ? '/alunos' : '/alunos/' + id}">Cancelar</a>
+                    </div>
+                </form>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>

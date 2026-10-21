@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Alunos e perfis')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+                    <div>
+                        <h1 class="h2">Alunos e perfis</h1>
+                        <p class="text-secondary mb-0">Dados pessoais, vínculo acadêmico e perfil do estudante.</p>
+                    </div>
+                    <a class="btn btn-primary" th:href="@{/alunos/novo}">Cadastrar aluno</a>
+                </div>
+                <form class="card card-body mb-4" method="get" th:action="@{/alunos}" th:object="${filtro}">
+                    <div class="row g-3">
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="busca">Nome ou RA</label>
+                            <input class="form-control" th:field="*{busca}" placeholder="Buscar aluno">
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="unidade">Unidade</label>
+                            <select class="form-select" th:field="*{unidade}">
+                                <option value="">Todos</option>
+                                <option th:each="unidade : ${unidades}" th:value="${unidade.idUnidadeFatec}" th:text="${unidade.nomeUnidade}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="curso">Curso</label>
+                            <select class="form-select" th:field="*{curso}">
+                                <option value="">Todos</option>
+                                <option th:each="curso : ${cursos}" th:value="${curso.idCurso}" th:text="${curso.nomeCurso}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="oferta">Oferta de curso</label>
+                            <select class="form-select" th:field="*{oferta}">
+                                <option value="">Todos</option>
+                                <option th:each="oferta : ${ofertas}" th:value="${oferta.idOfertaCurso}" th:text="${oferta.unidadeFatec.nomeUnidade + ' · ' + oferta.curso.nomeCurso + ' · ' + oferta.turno}"></option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex gap-2">
+                            <button class="btn btn-dark" type="submit">Aplicar filtros</button>
+                            <a class="btn btn-outline-secondary" th:href="@{/alunos}">Limpar</a>
+                        </div>
+                    </div>
+                </form>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h2 class="h6 mb-0">Alunos encontrados</h2>
+                        <span class="badge text-bg-light" th:text="${pagina.totalElements}"></span>
+                    </div>
+                    <div class="table-responsive" th:unless="${pagina.empty}">
+                        <table class="table align-middle mb-0">
+                            <caption class="visually-hidden">Alunos cadastrados e suas ofertas de curso</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Aluno / RA</th>
+                                    <th scope="col">Unidade</th>
+                                    <th scope="col">Curso / turno</th>
+                                    <th scope="col" class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="aluno : ${pagina.content}">
+                                    <td>
+                                        <a class="fw-semibold" th:href="@{/alunos/{id}(id=${aluno.idAluno})}" th:text="${aluno.nome}"></a>
+                                        <span class="d-block small text-secondary" th:text="${aluno.ra ?: 'RA não informado'}"></span>
+                                    </td>
+                                    <td th:text="${aluno.ofertaCurso.unidadeFatec.nomeUnidade}"></td>
+                                    <td>
+                                        <span th:text="${aluno.ofertaCurso.curso.nomeCurso}"></span>
+                                        <span class="d-block small text-secondary" th:text="${aluno.ofertaCurso.turno}"></span>
+                                    </td>
+                                    <td class="text-end text-nowrap">
+                                        <a class="btn btn-sm btn-outline-secondary" th:href="@{/alunos/{id}/editar(id=${aluno.idAluno})}" th:attr="aria-label=${'Editar ' + aluno.nome}">Editar</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${pagina.empty}" class="text-center p-5">
+                        <h3 class="h5">Nenhum aluno encontrado</h3>
+                        <p class="text-secondary">Cadastre o primeiro aluno ou ajuste os filtros da busca.</p>
+                        <a class="btn btn-outline-primary" th:href="@{/alunos/novo}">Cadastrar aluno</a>
+                    </div>
+                </div>
+                <nav class="d-flex justify-content-between align-items-center mt-3" aria-label="Paginação dos alunos" th:unless="${pagina.empty}">
+                    <span class="small text-secondary" th:text="${'Página ' + (pagina.number + 1) + ' de ' + pagina.totalPages}"></span>
+                    <div class="btn-group">
+                        <a th:if="${pagina.hasPrevious()}" class="btn btn-outline-secondary" th:href="@{/alunos(pagina=${pagina.number - 1},busca=${filtro.busca},unidade=${filtro.unidade},curso=${filtro.curso},oferta=${filtro.oferta})}">Anterior</a>
+                        <a th:if="${pagina.hasNext()}" class="btn btn-outline-secondary" th:href="@{/alunos(pagina=${pagina.number + 1},busca=${filtro.busca},unidade=${filtro.unidade},curso=${filtro.curso},oferta=${filtro.oferta})}">Próxima</a>
+                    </div>
+                </nav>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>
