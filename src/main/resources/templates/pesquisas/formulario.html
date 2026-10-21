@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Cadastro de pesquisa')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <a class="text-secondary d-inline-block mb-3" th:href="@{/pesquisas}">Voltar às pesquisas</a>
+                <h1 class="h2" th:text="${id == null ? 'Registrar pesquisa' : 'Editar pesquisa'}"></h1>
+                <p class="text-secondary mb-4">Cadastrar pesquisa de estágio. Campos com * são obrigatórios.</p>
+                <div th:if="${#lists.isEmpty(alunos)}" class="alert alert-warning">
+                    Cadastre um aluno antes de registrar uma pesquisa.
+                    <a th:href="@{/alunos/novo}">Cadastrar aluno</a>
+                </div>
+                <form method="post" th:action="${id == null ? '/pesquisas' : '/pesquisas/' + id}" th:object="${form}">
+                    <div th:replace="~{fragments/layout :: erros}"></div>
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">1. Identificação e coleta</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="idAluno">Aluno *</label>
+                                <select class="form-select" id="idAluno" th:field="*{idAluno}" required>
+                                    <option value="">Selecione o aluno</option>
+                                    <option th:each="aluno : ${alunos}" th:value="${aluno.idAluno}" th:text="${aluno.nome + ' · RA: ' + (aluno.ra ?: 'não informado') + ' · ' + aluno.ofertaCurso.unidadeFatec.nomeUnidade}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idAluno')}" th:errors="*{idAluno}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="dataColeta">Data da coleta *</label>
+                                <input class="form-control" id="dataColeta" type="date" th:field="*{dataColeta}" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataColeta')}" th:errors="*{dataColeta}"></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">2. Experiência e procura de estágio</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="quantidadeEstagioRealizado">Quantidade de estágios realizados *</label>
+                                <input class="form-control" id="quantidadeEstagioRealizado" type="number" th:field="*{quantidadeEstagioRealizado}" min="0" step="1" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('quantidadeEstagioRealizado')}" th:errors="*{quantidadeEstagioRealizado}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="tempoProcurandoEstagio">Tempo procurando estágio (meses) *</label>
+                                <input class="form-control" id="tempoProcurandoEstagio" type="number" th:field="*{tempoProcurandoEstagio}" min="0" step="1" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('tempoProcurandoEstagio')}" th:errors="*{tempoProcurandoEstagio}"></div>
+                            </div>
+                            <p class="col-12 small text-secondary mb-0">Informe zero quando não houver estágios realizados ou tempo de procura. A quantidade não indica se o aluno estagia atualmente.</p>
+                        </div>
+                    </section>
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">3. Observações</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="observacoes">Observações da coleta</label>
+                                <textarea class="form-control" rows="3" id="observacoes" th:field="*{observacoes}" maxlength="200"></textarea>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}"></div>
+                            </div>
+                            <p class="col-12 small text-secondary mb-0">Até 200 caracteres. Registre informações complementares pertinentes à pesquisa.</p>
+                        </div>
+                    </section>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(alunos)}">Salvar pesquisa</button>
+                        <a class="btn btn-outline-secondary" th:href="${id == null ? '/pesquisas' : '/pesquisas/' + id}">Cancelar</a>
+                    </div>
+                </form>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>
