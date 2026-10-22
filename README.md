@@ -1,6 +1,6 @@
 # Como executar o projeto
 
-É necessário ter JDK 21, com `JAVA_HOME` configurado, e Docker com Compose instalado e iniciado. No Windows, utilize o Docker Desktop com containers Linux, recomendo usar WSL. No Linux, instale também o Make.
+É necessário ter JDK 21, com `JAVA_HOME` configurado, e Docker com Compose instalado e iniciado. No Windows, utilize o Docker Desktop com containers Linux, recomendo usar WSL.
 
 **Opção Principal:** Utilize o codespaces, está configurado, use o make para subir o container e executar a aplicação.
 
@@ -10,7 +10,7 @@ Execute os comandos na raiz do projeto. A primeira execução precisa de acesso 
 
 Crie o arquivo de configuração com as variáveis de ambiente, conforme previsto em `.env.example`, deixe apenas com `.env`.
 
-Carregue as configurações e inicie o banco junto a aplicação:
+Carregue as configurações e inicie o banco, posteriormente a aplicação:
 
 ```powershell
 docker compose up -d --wait
@@ -21,9 +21,10 @@ Caso esteja utilizando alguma IDE, lembre-se de iniciarlizar a aplicação com a
 
 ## Linux
 
-Crie o arquivo de configuração com as variáveis de ambiente, caso ainda não exista, e inicie o projeto:
+Crie o arquivo de configuração com as variáveis de ambiente, caso ainda não exista, suba o banco de dados por meio do container e inicie o projeto:
 
 ```bash
+make db-up
 make run
 ```
 
