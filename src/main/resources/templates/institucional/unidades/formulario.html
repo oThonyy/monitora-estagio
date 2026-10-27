@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastro de Unidade FATEC')}"></head>
+<body>
+    <aside th:replace="~{fragments/layout :: menu}"></aside>
+
+    <div class="app-content d-flex flex-column">
+        <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+        <main class="p-3 p-md-4 p-xl-5">
+            <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+            <div class="mb-4">
+                <h1 class="h2"
+                    th:text="${id == null ? 'Nova Unidade FATEC' : 'Editar Unidade FATEC'}">
+                    Unidade FATEC
+                </h1>
+                <p class="text-secondary">
+                    Preencha os dados da unidade.
+                </p>
+            </div>
+
+            <section class="card">
+                <div class="card-body">
+                    <form method="post"
+                          th:action="${id == null ? '/unidades' : '/unidades/' + id}"
+                          th:object="${form}">
+
+                        <div th:replace="~{fragments/layout :: erros}"></div>
+
+                        <div class="mb-3">
+                            <label for="nomeUnidade" class="form-label">
+                                Nome da unidade *
+                            </label>
+                            <input id="nomeUnidade"
+                                   type="text"
+                                   class="form-control"
+                                   th:field="*{nomeUnidade}"
+                                   maxlength="100"
+                                   required>
+                            <div class="text-danger small"
+                                 th:errors="*{nomeUnidade}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cep" class="form-label">CEP</label>
+                            <input id="cep"
+                                   type="text"
+                                   class="form-control"
+                                   th:field="*{cep}"
+                                   maxlength="10">
+                            <div class="text-danger small"
+                                 th:errors="*{cep}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="logradouro" class="form-label">
+                                Logradouro
+                            </label>
+                            <input id="logradouro"
+                                   type="text"
+                                   class="form-control"
+                                   th:field="*{logradouro}"
+                                   maxlength="200">
+                            <div class="text-danger small"
+                                 th:errors="*{logradouro}"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="municipio" class="form-label">
+                                    Município
+                                </label>
+                                <input id="municipio"
+                                       type="text"
+                                       class="form-control"
+                                       th:field="*{municipio}"
+                                       maxlength="100">
+                                <div class="text-danger small"
+                                     th:errors="*{municipio}"></div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="uf" class="form-label">UF</label>
+                                <input id="uf"
+                                       type="text"
+                                       class="form-control"
+                                       th:field="*{uf}"
+                                       maxlength="2"
+                                       placeholder="SP">
+                                <div class="text-danger small"
+                                     th:errors="*{uf}"></div>
+                            </div>
+                        </div>
+
+                        <p class="text-secondary small">
+                            * Campos obrigatórios.
+                        </p>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                            <a th:href="@{/unidades}"
+                               class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    </div>
+
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
