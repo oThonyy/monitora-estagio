@@ -1,25 +1,87 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments/layout :: head('Unidades Fatec')}"></head>
-    <body>
-        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
-        <aside th:replace="~{fragments/layout :: menu}"></aside>
-        <div class="app-content d-flex flex-column">
-            <header th:replace="~{fragments/layout :: cabecalho}"></header>
-            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
-                <div th:replace="~{fragments/layout :: mensagens}"></div>
-                <div class="mb-4">
-                    <h1 class="h2">Unidades Fatec</h1>
-                    <p class="text-secondary mb-0">Unidades Institucionais.</p>
+<head th:replace="~{fragments/layout :: head('Unidades Fatec')}"></head>
+<body>
+    <a href="#conteudo"
+       class="visually-hidden-focusable position-absolute bg-white p-3">
+        Ir para o conteúdo
+    </a>
+
+    <aside th:replace="~{fragments/layout :: menu}"></aside>
+
+    <div class="app-content d-flex flex-column">
+        <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+        <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+            <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="h2">Unidades FATEC</h1>
+                    <p class="text-secondary mb-0">
+                        Cadastro e gerenciamento das unidades.
+                    </p>
                 </div>
-                <section class="card">
-                    <div class="card-body">
-                        <p class="text-secondary mb-0">To be continued.</p>
+
+                <a class="btn btn-primary" th:href="@{/unidades/novo}">
+                    Nova unidade
+                </a>
+            </div>
+
+            <section class="card">
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(unidades)}"
+                         class="text-secondary">
+                        Nenhuma unidade cadastrada.
                     </div>
-                </section>
-            </main>
-            <footer th:replace="~{fragments/layout :: rodape}"></footer>
-        </div>
-        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
-    </body>
+
+                    <div th:unless="${#lists.isEmpty(unidades)}"
+                         class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Nome da unidade</th>
+                                    <th>Município</th>
+                                    <th>UF</th>
+                                    <th>CEP</th>
+                                    <th class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="unidade : ${unidades}">
+                                    <td th:text="${unidade.nomeUnidade}"></td>
+                                    <td th:text="${unidade.municipio ?: '-'}"></td>
+                                    <td th:text="${unidade.uf ?: '-'}"></td>
+                                    <td th:text="${unidade.cep ?: '-'}"></td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a class="btn btn-sm btn-outline-primary"
+                                               th:href="@{/unidades/{id}/editar(id=${unidade.idUnidadeFatec})}">
+                                                Editar
+                                            </a>
+
+                                            <form method="post"
+                                                  th:action="@{/unidades/{id}/excluir(id=${unidade.idUnidadeFatec})}"
+                                                  onsubmit="return confirm('Deseja realmente excluir esta unidade?');">
+                                                <button class="btn btn-sm btn-outline-danger"
+                                                        type="submit">
+                                                    Excluir
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    </div>
+
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
 </html>
