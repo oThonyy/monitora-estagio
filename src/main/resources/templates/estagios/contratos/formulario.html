@@ -20,11 +20,11 @@
 
                     <section class="card mb-4">
                         <div class="card-header">
-                            <h2 class="fs-5 mb-0">1. Identificação do estudante e curso</h2>
+                            <h2 class="fs-5 mb-0">Identificação do estudante</h2>
                         </div>
                         <div class="card-body row g-3">
                             <div class="col-md-6">
-                                <label class="form-label" for="idAluno">Aluno *</label>
+                                <label class="form-label" for="idAluno">Aluno</label>
                                 <select class="form-select" id="idAluno" th:field="*{idAluno}" required>
                                     <option value="">Selecione o aluno</option>
                                     <option th:each="aluno : ${alunos}" th:value="${aluno.idAluno}" th:text="${aluno.nome + ' · RA: ' + (aluno.ra ?: 'não informado') + ' · ' + aluno.ofertaCurso.unidadeFatec.nomeUnidade}"></option>
@@ -32,13 +32,13 @@
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idAluno')}" th:errors="*{idAluno}"></div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label" for="curso">Qual curso está cursando</label>
+                                <label class="form-label" for="curso">Curso</label>
                                 <input class="form-control" id="curso" type="text" th:field="*{curso}" placeholder="Ex: Análise e Desenvolvimento de Sistemas" maxlength="100">
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="periodoCurso">Período do curso</label>
-                                <input class="form-control" id="periodoCurso" type="text" th:field="*{periodoCurso}" placeholder="Ex: 4º Semestre / 3º Período" maxlength="50">
+                                <input class="form-control" id="periodoCurso" type="text" th:field="*{periodoCurso}" placeholder="Ex: 4º Semestre" maxlength="50">
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('periodoCurso')}" th:errors="*{periodoCurso}"></div>
                             </div>
                             <div class="col-md-6">
@@ -51,26 +51,26 @@
 
                     <section class="card mb-4">
                         <div class="card-header">
-                            <h2 class="fs-5 mb-0">2. Área, cargo e função</h2>
+                            <h2 class="fs-5 mb-0">Área</h2>
                         </div>
                         <div class="card-body row g-3">
                             <div class="col-md-4">
-                                <label class="form-label" for="areaAtuacao">Área *</label>
+                                <label class="form-label" for="areaAtuacao">Área</label>
                                 <input class="form-control" id="areaAtuacao" type="text" th:field="*{areaAtuacao}" placeholder="Ex: Tecnologia da Informação" maxlength="100" required>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('areaAtuacao')}" th:errors="*{areaAtuacao}"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label" for="cargo">Cargo *</label>
+                                <label class="form-label" for="cargo">Cargo</label>
                                 <input class="form-control" id="cargo" type="text" th:field="*{cargo}" placeholder="Ex: Desenvolvedor Júnior" maxlength="100" required>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('cargo')}" th:errors="*{cargo}"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label" for="funcao">Função *</label>
+                                <label class="form-label" for="funcao">Função</label>
                                 <input class="form-control" id="funcao" type="text" th:field="*{funcao}" placeholder="Ex: Desenvolvimento Web Backend" maxlength="100" required>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('funcao')}" th:errors="*{funcao}"></div>
                             </div>
                             <div class="col-md-12">
-                                <label class="form-label" for="idEmpresa">Empresa contratante (opcional)</label>
+                                <label class="form-label" for="idEmpresa">Empresa contratante</label>
                                 <select class="form-select" id="idEmpresa" th:field="*{idEmpresa}">
                                     <option value="">Nenhuma ou empresa não cadastrada</option>
                                     <option th:each="empresa : ${empresas}" th:value="${empresa.idEmpresa}" th:text="${empresa.razaoSocial + (empresa.nomeFantasia != null ? ' (' + empresa.nomeFantasia + ')' : '')}"></option>
@@ -82,30 +82,30 @@
 
                     <section class="card mb-4">
                         <div class="card-header">
-                            <h2 class="fs-5 mb-0">3. Tipo de contrato, jornada e status</h2>
+                            <h2 class="fs-5 mb-0">Contrato</h2>
                         </div>
                         <div class="card-body row g-3">
                             <div class="col-md-4">
-                                <label class="form-label" for="tipoContrato">Tipo de contrato *</label>
+                                <label class="form-label" for="tipoContrato">Tipo de contrato</label>
                                 <select class="form-select" id="tipoContrato" th:field="*{tipoContrato}" required>
                                     <option th:each="tipo : ${tiposContrato}" th:value="${tipo}" th:text="${tipo.descricao}"></option>
                                 </select>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('tipoContrato')}" th:errors="*{tipoContrato}"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label" for="modalidadeTrabalho">Jornada *</label>
+                                <label class="form-label" for="modalidadeTrabalho">Jornada</label>
                                 <select class="form-select" id="modalidadeTrabalho" th:field="*{modalidadeTrabalho}" required>
                                     <option th:each="modalidade : ${modalidades}" th:value="${modalidade}" th:text="${modalidade.descricao}"></option>
                                 </select>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('modalidadeTrabalho')}" th:errors="*{modalidadeTrabalho}"></div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label" for="duracaoMeses">Duração do contrato (em meses) *</label>
+                                <label class="form-label" for="duracaoMeses">Duração do contrato (em meses)</label>
                                 <input class="form-control" id="duracaoMeses" type="number" th:field="*{duracaoMeses}" min="1" step="1" required>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('duracaoMeses')}" th:errors="*{duracaoMeses}"></div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label" for="situacaoContrato">Status do contrato *</label>
+                                <label class="form-label" for="situacaoContrato">Status do contrato</label>
                                 <select class="form-select" id="situacaoContrato" th:field="*{situacaoContrato}" required>
                                     <option th:each="situacao : ${situacoes}" th:value="${situacao}" th:text="${situacao.descricao}"></option>
                                 </select>
@@ -122,7 +122,7 @@
 
                     <section class="card mb-4">
                         <div class="card-header">
-                            <h2 class="fs-5 mb-0">4. Informações complementares (opcionais)</h2>
+                            <h2 class="fs-5 mb-0">Informações complementares</h2>
                         </div>
                         <div class="card-body row g-3">
                             <div class="col-md-3">
@@ -136,23 +136,23 @@
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataFimPrevista')}" th:errors="*{dataFimPrevista}"></div>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label" for="cargaHorariaSemanal">Carga horária semanal (h)</label>
+                                <label class="form-label" for="cargaHorariaSemanal">Carga horária semanal</label>
                                 <input class="form-control" id="cargaHorariaSemanal" type="number" th:field="*{cargaHorariaSemanal}" min="1" step="1">
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('cargaHorariaSemanal')}" th:errors="*{cargaHorariaSemanal}"></div>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label" for="valorBolsaMensal">Valor da bolsa/remuneração (R$)</label>
+                                <label class="form-label" for="valorBolsaMensal">Valor da bolsa/remuneração</label>
                                 <input class="form-control" id="valorBolsaMensal" type="number" step="0.01" min="0" th:field="*{valorBolsaMensal}">
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('valorBolsaMensal')}" th:errors="*{valorBolsaMensal}"></div>
                             </div>
                             <div class="col-md-6 d-flex gap-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="auxilioTransporte" th:field="*{auxilioTransporte}">
-                                    <label class="form-check-label" for="auxilioTransporte">Possui auxílio transporte</label>
+                                    <label class="form-check-label" for="auxilioTransporte">Possui auxílio transporte?</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="flexibilidadeHorario" th:field="*{flexibilidadeHorario}">
-                                    <label class="form-check-label" for="flexibilidadeHorario">Possui flexibilidade de horário</label>
+                                    <label class="form-check-label" for="flexibilidadeHorario">Possui flexibilidade de horário?</label>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -164,7 +164,7 @@
                     </section>
 
                     <div class="d-flex gap-2">
-                        <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(alunos)}">Salvar contrato</button>
+                        <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(alunos)}">Salvar</button>
                         <a class="btn btn-outline-secondary" th:href="${id == null ? '/contratos' : '/contratos/' + id}">Cancelar</a>
                     </div>
                 </form>
