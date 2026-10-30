@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Cadastro de contrato')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <a class="text-secondary d-inline-block mb-3" th:href="@{/contratos}">Voltar aos contratos</a>
+                <h1 class="h2" th:text="${id == null ? 'Novo contrato' : 'Editar contrato'}"></h1>
+                <p class="text-secondary mb-4">Cadastre ou edite as informações do contrato de estágio do aluno. Campos com * são obrigatórios.</p>
+                <div th:if="${#lists.isEmpty(alunos)}" class="alert alert-warning">
+                    Cadastre um aluno antes de registrar um contrato.
+                    <a th:href="@{/alunos/novo}">Cadastrar aluno</a>
+                </div>
+                <form method="post" th:action="${id == null ? '/contratos' : '/contratos/' + id}" th:object="${form}">
+                    <div th:replace="~{fragments/layout :: erros}"></div>
+
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">1. Identificação do estudante e curso</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="idAluno">Aluno *</label>
+                                <select class="form-select" id="idAluno" th:field="*{idAluno}" required>
+                                    <option value="">Selecione o aluno</option>
+                                    <option th:each="aluno : ${alunos}" th:value="${aluno.idAluno}" th:text="${aluno.nome + ' · RA: ' + (aluno.ra ?: 'não informado') + ' · ' + aluno.ofertaCurso.unidadeFatec.nomeUnidade}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idAluno')}" th:errors="*{idAluno}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="curso">Qual curso está cursando</label>
+                                <input class="form-control" id="curso" type="text" th:field="*{curso}" placeholder="Ex: Análise e Desenvolvimento de Sistemas" maxlength="100">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="periodoCurso">Período do curso</label>
+                                <input class="form-control" id="periodoCurso" type="text" th:field="*{periodoCurso}" placeholder="Ex: 4º Semestre / 3º Período" maxlength="50">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('periodoCurso')}" th:errors="*{periodoCurso}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="horarioCurso">Horário do curso</label>
+                                <input class="form-control" id="horarioCurso" type="text" th:field="*{horarioCurso}" placeholder="Ex: Noturno, Matutino, 19:00 às 22:30" maxlength="50">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('horarioCurso')}" th:errors="*{horarioCurso}"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">2. Área, cargo e função</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label" for="areaAtuacao">Área *</label>
+                                <input class="form-control" id="areaAtuacao" type="text" th:field="*{areaAtuacao}" placeholder="Ex: Tecnologia da Informação" maxlength="100" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('areaAtuacao')}" th:errors="*{areaAtuacao}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="cargo">Cargo *</label>
+                                <input class="form-control" id="cargo" type="text" th:field="*{cargo}" placeholder="Ex: Desenvolvedor Júnior" maxlength="100" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('cargo')}" th:errors="*{cargo}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="funcao">Função *</label>
+                                <input class="form-control" id="funcao" type="text" th:field="*{funcao}" placeholder="Ex: Desenvolvimento Web Backend" maxlength="100" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('funcao')}" th:errors="*{funcao}"></div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="idEmpresa">Empresa contratante (opcional)</label>
+                                <select class="form-select" id="idEmpresa" th:field="*{idEmpresa}">
+                                    <option value="">Nenhuma ou empresa não cadastrada</option>
+                                    <option th:each="empresa : ${empresas}" th:value="${empresa.idEmpresa}" th:text="${empresa.razaoSocial + (empresa.nomeFantasia != null ? ' (' + empresa.nomeFantasia + ')' : '')}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('idEmpresa')}" th:errors="*{idEmpresa}"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">3. Tipo de contrato, jornada e status</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label" for="tipoContrato">Tipo de contrato *</label>
+                                <select class="form-select" id="tipoContrato" th:field="*{tipoContrato}" required>
+                                    <option th:each="tipo : ${tiposContrato}" th:value="${tipo}" th:text="${tipo.descricao}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('tipoContrato')}" th:errors="*{tipoContrato}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="modalidadeTrabalho">Jornada *</label>
+                                <select class="form-select" id="modalidadeTrabalho" th:field="*{modalidadeTrabalho}" required>
+                                    <option th:each="modalidade : ${modalidades}" th:value="${modalidade}" th:text="${modalidade.descricao}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('modalidadeTrabalho')}" th:errors="*{modalidadeTrabalho}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label" for="duracaoMeses">Duração do contrato (em meses) *</label>
+                                <input class="form-control" id="duracaoMeses" type="number" th:field="*{duracaoMeses}" min="1" step="1" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('duracaoMeses')}" th:errors="*{duracaoMeses}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="situacaoContrato">Status do contrato *</label>
+                                <select class="form-select" id="situacaoContrato" th:field="*{situacaoContrato}" required>
+                                    <option th:each="situacao : ${situacoes}" th:value="${situacao}" th:text="${situacao.descricao}"></option>
+                                </select>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('situacaoContrato')}" th:errors="*{situacaoContrato}"></div>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center pt-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="possuiBancoHoras" th:field="*{possuiBancoHoras}">
+                                    <label class="form-check-label fw-semibold" for="possuiBancoHoras">Possui banco de horas?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card mb-4">
+                        <div class="card-header">
+                            <h2 class="fs-5 mb-0">4. Informações complementares (opcionais)</h2>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label" for="dataInicio">Data de início</label>
+                                <input class="form-control" id="dataInicio" type="date" th:field="*{dataInicio}">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="dataFimPrevista">Data de término prevista</label>
+                                <input class="form-control" id="dataFimPrevista" type="date" th:field="*{dataFimPrevista}">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('dataFimPrevista')}" th:errors="*{dataFimPrevista}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="cargaHorariaSemanal">Carga horária semanal (h)</label>
+                                <input class="form-control" id="cargaHorariaSemanal" type="number" th:field="*{cargaHorariaSemanal}" min="1" step="1">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('cargaHorariaSemanal')}" th:errors="*{cargaHorariaSemanal}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="valorBolsaMensal">Valor da bolsa/remuneração (R$)</label>
+                                <input class="form-control" id="valorBolsaMensal" type="number" step="0.01" min="0" th:field="*{valorBolsaMensal}">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('valorBolsaMensal')}" th:errors="*{valorBolsaMensal}"></div>
+                            </div>
+                            <div class="col-md-6 d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auxilioTransporte" th:field="*{auxilioTransporte}">
+                                    <label class="form-check-label" for="auxilioTransporte">Possui auxílio transporte</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="flexibilidadeHorario" th:field="*{flexibilidadeHorario}">
+                                    <label class="form-check-label" for="flexibilidadeHorario">Possui flexibilidade de horário</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="atividadesDesenvolvidas">Atividades desenvolvidas</label>
+                                <textarea class="form-control" rows="3" id="atividadesDesenvolvidas" th:field="*{atividadesDesenvolvidas}" maxlength="200" placeholder="Descrição resumida das atividades desempenhadas"></textarea>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('atividadesDesenvolvidas')}" th:errors="*{atividadesDesenvolvidas}"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(alunos)}">Salvar contrato</button>
+                        <a class="btn btn-outline-secondary" th:href="${id == null ? '/contratos' : '/contratos/' + id}">Cancelar</a>
+                    </div>
+                </form>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>

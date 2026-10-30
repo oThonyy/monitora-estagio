@@ -11,10 +11,4 @@ public class EstagioController {
         model.addAttribute("modulo", "empresas");
         return "estagios/empresas/listagem";
     }
-
-    @GetMapping("/contratos")
-    public String contratos(Model model) {
-        model.addAttribute("modulo", "contratos");
-        return "estagios/contratos/listagem";
-    }
 }

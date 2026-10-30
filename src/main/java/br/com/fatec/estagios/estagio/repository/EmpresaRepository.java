@@ -1,8 +1,7 @@
 package br.com.fatec.estagios.estagio.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import br.com.fatec.estagios.estagio.entity.Empresa;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;

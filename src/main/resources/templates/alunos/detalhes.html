@@ -124,7 +124,16 @@
                             <a class="btn btn-primary" th:href="@{/pesquisas/nova(aluno=${aluno.idAluno})}">Registrar pesquisa</a>
                             <a class="btn btn-outline-secondary" th:href="@{/pesquisas(aluno=${aluno.idAluno})}">Consultar histórico</a>
                         </div>
-                        <p class="small text-secondary mt-3 mb-0">Contratos serão disponibilizados nas próximas etapas.</p>
+                    </div>
+                </section>
+                <section class="card mt-4">
+                    <div class="card-body">
+                        <h2 class="h5">Contratos do aluno</h2>
+                        <p class="text-secondary">Consulte os contratos de estágio ou registre um novo contrato para este estudante.</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-primary" th:href="@{/contratos/novo(aluno=${aluno.idAluno})}">Registrar contrato</a>
+                            <a class="btn btn-outline-secondary" th:href="@{/contratos(aluno=${aluno.idAluno})}">Consultar contratos</a>
+                        </div>
                     </div>
                 </section>
                 <form class="mt-4" method="post" th:action="@{/alunos/{id}/excluir(id=${aluno.idAluno})}" data-confirmar="Excluir este aluno e seu perfil estudantil? Esta ação não pode ser desfeita. Alunos com pesquisas, acompanhamentos ou contratos não podem ser excluídos.">
