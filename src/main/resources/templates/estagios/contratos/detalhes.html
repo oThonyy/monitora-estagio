@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/layout :: head('Detalhes do contrato')}"></head>
+    <body>
+        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+        <aside th:replace="~{fragments/layout :: menu}"></aside>
+        <div class="app-content d-flex flex-column">
+            <header th:replace="~{fragments/layout :: cabecalho}"></header>
+            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+                <div th:replace="~{fragments/layout :: mensagens}"></div>
+                <a class="text-secondary d-inline-block mb-3" th:href="@{/contratos}">Voltar aos contratos</a>
+                <div class="d-flex flex-wrap justify-content-between gap-3 mb-4">
+                    <div>
+                        <p class="text-secondary mb-1">Contrato de estágio do aluno</p>
+                        <h1 class="h2" th:text="${'Contrato de ' + contrato.aluno.nome}"></h1>
+                    </div>
+                    <a class="btn btn-primary align-self-start" th:href="@{/contratos/{id}/editar(id=${contrato.idContratoEstagio})}">Editar contrato</a>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-xl-6">
+                        <section class="card h-100">
+                            <div class="card-header">
+                                <h2 class="h5 mb-0">Dados do contrato e função</h2>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-5 mb-2">Aluno</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.aluno.nome}"></dd>
+                                    <dt class="col-sm-5 mb-2">RA</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.aluno.ra ?: 'Não informado'}"></dd>
+                                    <dt class="col-sm-5 mb-2">Área</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.areaAtuacaoEstagio ?: 'Não informada'}"></dd>
+                                    <dt class="col-sm-5 mb-2">Cargo</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.cargoEstagio ?: 'Não informado'}"></dd>
+                                    <dt class="col-sm-5 mb-2">Função</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.funcao ?: 'Não informada'}"></dd>
+                                    <dt class="col-sm-5 mb-2">Empresa</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.empresa != null ? contrato.empresa.razaoSocial : 'Não vinculada'}"></dd>
+                                </dl>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <section class="card h-100">
+                            <div class="card-header">
+                                <h2 class="h5 mb-0">Curso e jornada</h2>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-5 mb-2">Curso atual</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.curso ?: contrato.aluno.ofertaCurso.curso.nomeCurso}"></dd>
+                                    <dt class="col-sm-5 mb-2">Período do curso</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.periodoCurso ?: 'Não informado'}"></dd>
+                                    <dt class="col-sm-5 mb-2">Horário do curso</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.horarioCurso ?: (contrato.aluno.ofertaCurso.turno != null ? contrato.aluno.ofertaCurso.turno.name() : 'Não informado')}"></dd>
+                                    <dt class="col-sm-5 mb-2">Tipo de contrato</dt>
+                                    <dd class="col-sm-7">
+                                        <span class="badge text-bg-light border" th:text="${contrato.tipoContrato != null ? contrato.tipoContrato.descricao : 'Não informado'}"></span>
+                                    </dd>
+                                    <dt class="col-sm-5 mb-2">Jornada</dt>
+                                    <dd class="col-sm-7">
+                                        <span class="badge text-bg-secondary" th:text="${contrato.modalidadeTrabalho != null ? contrato.modalidadeTrabalho.descricao : 'Não informada'}"></span>
+                                    </dd>
+                                    <dt class="col-sm-5 mb-2">Possui banco de horas?</dt>
+                                    <dd class="col-sm-7">
+                                        <span th:if="${contrato.possuiBancoHoras}" class="badge text-bg-success">Sim</span>
+                                        <span th:unless="${contrato.possuiBancoHoras}" class="badge text-bg-light border">Não</span>
+                                    </dd>
+                                    <dt class="col-sm-5 mb-2">Duração do contrato</dt>
+                                    <dd class="col-sm-7" th:text="${contrato.duracaoMeses != null ? contrato.duracaoMeses + ' meses' : 'Não informada'}"></dd>
+                                    <dt class="col-sm-5 mb-2">Status</dt>
+                                    <dd class="col-sm-7">
+                                        <span th:if="${contrato.situacaoContrato != null and contrato.situacaoContrato.name() == 'ATIVO'}" class="badge text-bg-success" th:text="${contrato.situacaoContrato.descricao}"></span>
+                                        <span th:unless="${contrato.situacaoContrato != null and contrato.situacaoContrato.name() == 'ATIVO'}" class="badge text-bg-secondary" th:text="${contrato.situacaoContrato != null ? contrato.situacaoContrato.descricao : 'Não informado'}"></span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-12" th:if="${contrato.dataInicio != null or contrato.dataFimPrevista != null or contrato.cargaHorariaSemanal != null or contrato.valorBolsaMensal != null or contrato.atividadesDesenvolvidas != null}">
+                        <section class="card">
+                            <div class="card-header">
+                                <h2 class="h5 mb-0">Informações complementares</h2>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.dataInicio != null}">Data de início</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.dataInicio != null}" th:text="${#temporals.format(contrato.dataInicio, 'dd/MM/yyyy')}"></dd>
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.dataFimPrevista != null}">Data fim prevista</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.dataFimPrevista != null}" th:text="${#temporals.format(contrato.dataFimPrevista, 'dd/MM/yyyy')}"></dd>
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.cargaHorariaSemanal != null}">Carga horária semanal</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.cargaHorariaSemanal != null}" th:text="${contrato.cargaHorariaSemanal + ' horas/semana'}"></dd>
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.valorBolsaMensal != null}">Bolsa mensal / remuneração</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.valorBolsaMensal != null}" th:text="${'R$ ' + #numbers.formatDecimal(contrato.valorBolsaMensal, 1, 'POINT', 2, 'COMMA')}"></dd>
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.auxilioTransporte != null}">Auxílio transporte</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.auxilioTransporte != null}" th:text="${contrato.auxilioTransporte ? 'Sim' : 'Não'}"></dd>
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.flexibilidadeHorario != null}">Flexibilidade de horário</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.flexibilidadeHorario != null}" th:text="${contrato.flexibilidadeHorario ? 'Sim' : 'Não'}"></dd>
+                                    <dt class="col-sm-3 mb-2" th:if="${contrato.atividadesDesenvolvidas != null}">Atividades</dt>
+                                    <dd class="col-sm-9" th:if="${contrato.atividadesDesenvolvidas != null}" th:text="${contrato.atividadesDesenvolvidas}"></dd>
+                                </dl>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a class="btn btn-outline-secondary" th:href="@{/alunos/{id}(id=${contrato.aluno.idAluno})}">Ver aluno</a>
+                    <a class="btn btn-outline-secondary" th:href="@{/contratos(aluno=${contrato.aluno.idAluno})}">Histórico de contratos do aluno</a>
+                    <a class="btn btn-outline-primary" th:href="@{/contratos/novo(aluno=${contrato.aluno.idAluno})}">Novo contrato para este aluno</a>
+                </div>
+
+                <form class="mt-4" method="post" th:action="@{/contratos/{id}/excluir(id=${contrato.idContratoEstagio})}" data-confirmar="Excluir este contrato? Esta ação remove o registro do contrato e não pode ser desfeita.">
+                    <button class="btn btn-outline-danger" type="submit">Excluir contrato</button>
+                </form>
+            </main>
+            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+        </div>
+        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+    </body>
+</html>
