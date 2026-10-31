@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastro de Empresa')}"></head>
+<body>
+    <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+    <aside th:replace="~{fragments/layout :: menu}"></aside>
+
+    <div class="app-content d-flex flex-column">
+        <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+        <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+            <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+            <div class="mb-4">
+                <h1 class="h2" th:text="${id == null ? 'Nova empresa' : 'Editar empresa'}">Empresa</h1>
+                <p class="text-secondary mb-0">Preencha os dados cadastrais da empresa.</p>
+            </div>
+
+            <section class="card">
+                <div class="card-body">
+                    <form method="post"
+                          th:action="${id == null ? '/empresas' : '/empresas/' + id}"
+                          th:object="${form}">
+                        <div th:replace="~{fragments/layout :: erros}"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="razaoSocial" class="form-label">Razão social *</label>
+                                <input id="razaoSocial" type="text" class="form-control"
+                                       th:field="*{razaoSocial}" maxlength="200" required>
+                                <div class="text-danger small" th:errors="*{razaoSocial}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nomeFantasia" class="form-label">Nome fantasia</label>
+                                <input id="nomeFantasia" type="text" class="form-control"
+                                       th:field="*{nomeFantasia}" maxlength="200">
+                                <div class="text-danger small" th:errors="*{nomeFantasia}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cnpj" class="form-label">CNPJ</label>
+                                <input id="cnpj" type="text" class="form-control"
+                                       th:field="*{cnpj}" maxlength="18" placeholder="00.000.000/0000-00">
+                                <div class="form-text">O CNPJ deve ser único. O preenchimento é opcional.</div>
+                                <div class="text-danger small" th:errors="*{cnpj}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="segmentoMercado" class="form-label">Segmento de mercado</label>
+                                <input id="segmentoMercado" type="text" class="form-control"
+                                       th:field="*{segmentoMercado}" maxlength="100">
+                                <div class="text-danger small" th:errors="*{segmentoMercado}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="areaAtuacaoEmpresa" class="form-label">Área de atuação</label>
+                                <input id="areaAtuacaoEmpresa" type="text" class="form-control"
+                                       th:field="*{areaAtuacaoEmpresa}" maxlength="100">
+                                <div class="text-danger small" th:errors="*{areaAtuacaoEmpresa}"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input id="email" type="email" class="form-control"
+                                       th:field="*{email}" maxlength="100">
+                                <div class="text-danger small" th:errors="*{email}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="cepEmpresa" class="form-label">CEP</label>
+                                <input id="cepEmpresa" type="text" class="form-control"
+                                       th:field="*{cepEmpresa}" maxlength="10" placeholder="00000-000">
+                                <div class="text-danger small" th:errors="*{cepEmpresa}"></div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label for="endereco" class="form-label">Endereço</label>
+                                <input id="endereco" type="text" class="form-control"
+                                       th:field="*{endereco}" maxlength="200">
+                                <div class="text-danger small" th:errors="*{endereco}"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="linkedin" class="form-label">LinkedIn</label>
+                            <input id="linkedin" type="text" class="form-control"
+                                   th:field="*{linkedin}" maxlength="100" placeholder="https://www.linkedin.com/company/...">
+                            <div class="text-danger small" th:errors="*{linkedin}"></div>
+                        </div>
+
+                        <p class="text-secondary small">* Campos obrigatórios.</p>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <a th:href="@{/empresas}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    </div>
+
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

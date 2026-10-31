@@ -1,25 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments/layout :: head('Empresas')}"></head>
-    <body>
-        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
-        <aside th:replace="~{fragments/layout :: menu}"></aside>
-        <div class="app-content d-flex flex-column">
-            <header th:replace="~{fragments/layout :: cabecalho}"></header>
-            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
-                <div th:replace="~{fragments/layout :: mensagens}"></div>
-                <div class="mb-4">
+<head th:replace="~{fragments/layout :: head('Empresas')}"></head>
+<body>
+    <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+    <aside th:replace="~{fragments/layout :: menu}"></aside>
+
+    <div class="app-content d-flex flex-column">
+        <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+        <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+            <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
                     <h1 class="h2">Empresas</h1>
                     <p class="text-secondary mb-0">Empresas relacionadas às experiências de estágio dos alunos.</p>
                 </div>
-                <section class="card">
-                    <div class="card-body">
-                        <p class="text-secondary mb-0">To be continued.</p>
+                <a class="btn btn-primary" th:href="@{/empresas/novo}">Nova empresa</a>
+            </div>
+
+            <section class="card">
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(empresas)}" class="text-secondary">
+                        Nenhuma empresa cadastrada.
                     </div>
-                </section>
-            </main>
-            <footer th:replace="~{fragments/layout :: rodape}"></footer>
-        </div>
-        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
-    </body>
+
+                    <div th:unless="${#lists.isEmpty(empresas)}" class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Razão social</th>
+                                    <th scope="col">Nome fantasia</th>
+                                    <th scope="col">CNPJ</th>
+                                    <th scope="col">Segmento de mercado</th>
+                                    <th scope="col" class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="empresa : ${empresas}">
+                                    <td th:text="${empresa.razaoSocial}">Empresa</td>
+                                    <td th:text="${empresa.nomeFantasia ?: '-'}">-</td>
+                                    <td th:text="${empresa.cnpj ?: '-'}">-</td>
+                                    <td th:text="${empresa.segmentoMercado ?: '-'}">-</td>
+                                    <td class="text-end">
+                                        <div class="d-flex flex-wrap justify-content-end gap-2">
+                                            <a class="btn btn-sm btn-outline-secondary"
+                                               th:href="@{/empresas/{id}(id=${empresa.idEmpresa})}">Detalhes</a>
+                                            <a class="btn btn-sm btn-outline-primary"
+                                               th:href="@{/empresas/{id}/editar(id=${empresa.idEmpresa})}">Editar</a>
+                                            <form method="post"
+                                                  th:action="@{/empresas/{id}/excluir(id=${empresa.idEmpresa})}"
+                                                  data-confirmar="Deseja realmente excluir esta empresa? Esta ação não pode ser desfeita.">
+                                                <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    </div>
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
 </html>
