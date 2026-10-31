@@ -6,7 +6,6 @@ import br.com.fatec.estagios.comum.RegistroNaoEncontradoException;
 import br.com.fatec.estagios.contrato.dto.ContratoFiltro;
 import br.com.fatec.estagios.contrato.dto.ContratoFormulario;
 import br.com.fatec.estagios.estagio.entity.ContratoEstagio;
-import br.com.fatec.estagios.estagio.entity.Empresa;
 import br.com.fatec.estagios.estagio.repository.ContratoEstagioRepository;
 import br.com.fatec.estagios.estagio.repository.EmpresaRepository;
 import jakarta.persistence.criteria.Predicate;

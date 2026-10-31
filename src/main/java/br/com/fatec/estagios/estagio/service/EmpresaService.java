@@ -1,8 +1,8 @@
-package br.com.fatec.estagios.empresa.service;
+package br.com.fatec.estagios.estagio.service;
 
 import br.com.fatec.estagios.comum.DomainException;
 import br.com.fatec.estagios.comum.RegistroNaoEncontradoException;
-import br.com.fatec.estagios.empresa.dto.EmpresaFormulario;
+import br.com.fatec.estagios.estagio.dto.EmpresaFormulario;
 import br.com.fatec.estagios.estagio.entity.Empresa;
 import br.com.fatec.estagios.estagio.repository.ContratoEstagioRepository;
 import br.com.fatec.estagios.estagio.repository.EmpresaRepository;

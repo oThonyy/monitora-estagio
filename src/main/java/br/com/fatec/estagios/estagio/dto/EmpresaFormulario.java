@@ -1,4 +1,4 @@
-package br.com.fatec.estagios.empresa.dto;
+package br.com.fatec.estagios.estagio.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

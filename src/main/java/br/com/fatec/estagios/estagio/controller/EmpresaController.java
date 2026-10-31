@@ -1,8 +1,8 @@
-package br.com.fatec.estagios.empresa.controller;
+package br.com.fatec.estagios.estagio.controller;
 
 import br.com.fatec.estagios.comum.DomainException;
-import br.com.fatec.estagios.empresa.dto.EmpresaFormulario;
-import br.com.fatec.estagios.empresa.service.EmpresaService;
+import br.com.fatec.estagios.estagio.dto.EmpresaFormulario;
+import br.com.fatec.estagios.estagio.service.EmpresaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
