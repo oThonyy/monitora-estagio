@@ -1,25 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="~{fragments/layout :: head('Cursos')}"></head>
-    <body>
-        <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
-        <aside th:replace="~{fragments/layout :: menu}"></aside>
-        <div class="app-content d-flex flex-column">
-            <header th:replace="~{fragments/layout :: cabecalho}"></header>
-            <main class="p-3 p-md-4 p-xl-5" id="conteudo">
-                <div th:replace="~{fragments/layout :: mensagens}"></div>
-                <div class="mb-4">
-                    <h1 class="h2">Cursos</h1>
-                    <p class="text-secondary mb-0">Cadastro dos cursos.</p>
-                </div>
-                <section class="card">
-                    <div class="card-body">
-                        <p class="text-secondary mb-0">Aqui virá o cadastro de Curso JUNTO da Oferta Assim como Aluno e Acompanhamento Acadêmico (Só seguir o exemplo)</p>
-                    </div>
-                </section>
-            </main>
-            <footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+<head th:replace="~{fragments/layout :: head('Cursos')}"></head>
+
+<body>
+<aside th:replace="~{fragments/layout :: menu}"></aside>
+
+<div class="app-content d-flex flex-column">
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main class="p-3 p-md-4 p-xl-5">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">Cursos</h1>
+
+            <a class="btn btn-primary" th:href="@{/cursos/novo}">
+                Novo curso
+            </a>
         </div>
-        <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
-    </body>
+
+        <section class="card">
+            <div class="card-body">
+
+                <p th:if="${#lists.isEmpty(cursos)}">
+                    Nenhum curso cadastrado.
+                </p>
+
+                <div class="table-responsive"
+                     th:unless="${#lists.isEmpty(cursos)}">
+
+                    <table class="table table-hover align-middle">
+                        <thead>
+                        <tr>
+                            <th>Nome do curso</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="curso : ${cursos}">
+                            <td th:text="${curso.nomeCurso}"></td>
+
+                            <td class="text-end">
+                                <div class="d-flex gap-2 justify-content-end">
+
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       th:href="@{/cursos/{id}/ofertas(id=${curso.idCurso})}">
+                                        Ofertas
+                                    </a>
+
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       th:href="@{/cursos/{id}/editar(id=${curso.idCurso})}">
+                                        Editar
+                                    </a>
+
+                                    <form method="post"
+                                          th:action="@{/cursos/{id}/excluir(id=${curso.idCurso})}"
+                                          onsubmit="return confirm('Excluir este curso?');">
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Excluir
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
 </html>

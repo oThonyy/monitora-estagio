@@ -2,7 +2,6 @@ package br.com.fatec.estagios.comum.service;
 
 import br.com.fatec.estagios.aluno.repository.AlunoRepository;
 import br.com.fatec.estagios.comum.SituacaoContrato;
-import br.com.fatec.estagios.empresa.repository.EmpresaRepository;
 import br.com.fatec.estagios.estagio.repository.*;
 import br.com.fatec.estagios.institucional.repository.*;
 import br.com.fatec.estagios.pesquisa.repository.PesquisaEstagioRepository;
