@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Ofertas do curso')}"></head>
+
+<body>
+<aside th:replace="~{fragments/layout :: menu}"></aside>
+
+<div class="app-content d-flex flex-column">
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main class="p-3 p-md-4 p-xl-5">
+
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1 class="h2">Ofertas do curso</h1>
+
+        <p th:text="${curso.nomeCurso}"></p>
+
+        <div class="d-flex gap-2 mb-4">
+
+            <a class="btn btn-primary"
+               th:href="@{/cursos/{id}/ofertas/nova(id=${curso.idCurso})}">
+                Nova oferta
+            </a>
+
+            <a class="btn btn-outline-secondary"
+               th:href="@{/cursos}">
+                Voltar aos cursos
+            </a>
+
+        </div>
+
+        <section class="card">
+            <div class="card-body">
+
+                <p th:if="${#lists.isEmpty(ofertas)}">
+                    Nenhuma oferta cadastrada.
+                </p>
+
+                <div class="table-responsive"
+                     th:unless="${#lists.isEmpty(ofertas)}">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                        <tr>
+                            <th>Unidade FATEC</th>
+                            <th>Turno</th>
+                            <th>Duração (semestres)</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="oferta : ${ofertas}">
+
+                            <td th:text="${oferta.unidadeFatec.nomeUnidade}"></td>
+
+                            <td th:text="${oferta.turno}"></td>
+
+                            <td th:text="${oferta.duracao}"></td>
+
+                            <td class="text-end">
+                                <div class="d-flex gap-2 justify-content-end">
+
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       th:href="@{/cursos/{c}/ofertas/{id}/editar(c=${curso.idCurso},id=${oferta.idOfertaCurso})}">
+                                        Editar
+                                    </a>
+
+                                    <form method="post"
+                                          th:action="@{/cursos/{c}/ofertas/{id}/excluir(c=${curso.idCurso},id=${oferta.idOfertaCurso})}"
+                                          onsubmit="return confirm('Excluir esta oferta?');">
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Excluir
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

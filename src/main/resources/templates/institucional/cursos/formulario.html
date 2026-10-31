@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Cadastro de curso')}"></head>
+
+<body>
+<aside th:replace="~{fragments/layout :: menu}"></aside>
+
+<div class="app-content d-flex flex-column">
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main class="p-3 p-md-4 p-xl-5">
+
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1 class="h2 mb-4"
+            th:text="${id == null ? 'Novo curso' : 'Editar curso'}">
+        </h1>
+
+        <section class="card">
+            <div class="card-body">
+
+                <form method="post"
+                      th:action="${id == null ? '/cursos' : '/cursos/' + id}"
+                      th:object="${form}">
+
+                    <div th:replace="~{fragments/layout :: erros}"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="nomeCurso">
+                            Nome do curso *
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="nomeCurso"
+                               th:field="*{nomeCurso}"
+                               maxlength="100"
+                               required>
+
+                        <div class="text-danger small"
+                             th:errors="*{nomeCurso}"></div>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">
+                        Salvar
+                    </button>
+
+                    <a class="btn btn-outline-secondary"
+                       th:href="@{/cursos}">
+                        Cancelar
+                    </a>
+
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

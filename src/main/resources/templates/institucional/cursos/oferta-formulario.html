@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Oferta de curso')}"></head>
+
+<body>
+<aside th:replace="~{fragments/layout :: menu}"></aside>
+
+<div class="app-content d-flex flex-column">
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main class="p-3 p-md-4 p-xl-5">
+
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1 class="h2"
+            th:text="${id == null ? 'Nova oferta' : 'Editar oferta'}">
+        </h1>
+
+        <p th:text="${curso.nomeCurso}"></p>
+
+        <section class="card">
+            <div class="card-body">
+
+                <form method="post"
+                      th:action="${id == null ? '/cursos/' + curso.idCurso + '/ofertas' : '/cursos/' + curso.idCurso + '/ofertas/' + id}"
+                      th:object="${form}">
+
+                    <div th:replace="~{fragments/layout :: erros}"></div>
+
+                    <!-- Unidade FATEC -->
+                    <div class="mb-3">
+                        <label class="form-label" for="unidade">
+                            Unidade FATEC *
+                        </label>
+
+                        <select class="form-select"
+                                id="unidade"
+                                th:field="*{idUnidadeFatec}"
+                                required>
+
+                            <option value="">Selecione</option>
+
+                            <option th:each="unidade : ${unidades}"
+                                    th:value="${unidade.idUnidadeFatec}"
+                                    th:text="${unidade.nomeUnidade}">
+                            </option>
+
+                        </select>
+
+                        <div class="text-danger small"
+                             th:errors="*{idUnidadeFatec}"></div>
+                    </div>
+
+                    <!-- Turno -->
+                    <div class="mb-3">
+                        <label class="form-label" for="turno">
+                            Turno *
+                        </label>
+
+                        <select class="form-select"
+                                id="turno"
+                                th:field="*{turno}"
+                                required>
+
+                            <option value="">Selecione</option>
+
+                            <option th:each="turno : ${turnos}"
+                                    th:value="${turno}"
+                                    th:text="${turno}">
+                            </option>
+
+                        </select>
+
+                        <div class="text-danger small"
+                             th:errors="*{turno}"></div>
+                    </div>
+
+                    <!-- Duração -->
+                    <div class="mb-3">
+                        <label class="form-label" for="duracao">
+                            Duração (semestres) *
+                        </label>
+
+                        <input type="number"
+                               class="form-control"
+                               id="duracao"
+                               th:field="*{duracao}"
+                               min="1"
+                               required>
+
+                        <div class="text-danger small"
+                             th:errors="*{duracao}"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Salvar
+                    </button>
+
+                    <a class="btn btn-outline-secondary"
+                       th:href="@{/cursos/{id}/ofertas(id=${curso.idCurso})}">
+                        Cancelar
+                    </a>
+
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</div>
+
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
