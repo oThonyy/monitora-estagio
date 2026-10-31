@@ -3,8 +3,6 @@ package br.com.fatec.estagios.comum.service;
 import org.springframework.data.domain.Sort;
 import br.com.fatec.estagios.aluno.entity.Aluno;
 import br.com.fatec.estagios.aluno.repository.AlunoRepository;
-import br.com.fatec.estagios.estagio.entity.Empresa;
-import br.com.fatec.estagios.estagio.repository.EmpresaRepository;
 import br.com.fatec.estagios.institucional.entity.*;
 import br.com.fatec.estagios.institucional.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,6 @@ public class OpcoesFormularioService {
     private final OfertaCursoRepository ofertas;
     private final UnidadeFatecRepository unidades;
     private final CursoRepository cursos;
-    private final EmpresaRepository empresas;
 
     public List<Aluno> alunos() {
         return alunos.findAllWithOferta().stream().sorted(Comparator.comparing(Aluno::getNome)).toList();
@@ -38,9 +35,5 @@ public class OpcoesFormularioService {
 
     public List<Curso> cursos() {
         return cursos.findAll(Sort.by("nomeCurso"));
-    }
-
-    public List<Empresa> empresas() {
-        return empresas.findAll(Sort.by("razaoSocial"));
     }
 }

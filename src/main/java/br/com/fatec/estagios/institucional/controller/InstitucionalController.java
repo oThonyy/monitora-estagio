@@ -97,4 +97,9 @@ public class InstitucionalController {
         return "redirect:/unidades";
     }
 
+    @GetMapping("/cursos")
+    public String cursos(Model model) {
+        model.addAttribute("modulo", "cursos");
+        return "institucional/cursos/listagem";
+    }
 }

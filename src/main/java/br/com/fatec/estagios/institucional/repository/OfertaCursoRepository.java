@@ -22,14 +22,4 @@ public interface OfertaCursoRepository extends JpaRepository<OfertaCurso, Long> 
     @Query("SELECT o FROM OfertaCurso o JOIN FETCH o.unidadeFatec JOIN FETCH o.curso WHERE o.unidadeFatec.idUnidadeFatec = :idUnidade")
     
     List<OfertaCurso> findByUnidadeWithDetails(@Param("idUnidade") Long idUnidade);
-
-    @Query("""
-    SELECT o FROM OfertaCurso o
-    JOIN FETCH o.unidadeFatec
-    JOIN FETCH o.curso
-    WHERE o.curso.idCurso = :idCurso
-""")
-    List<OfertaCurso> findByCursoWithDetails(
-            @Param("idCurso") Long idCurso
-    );
 }

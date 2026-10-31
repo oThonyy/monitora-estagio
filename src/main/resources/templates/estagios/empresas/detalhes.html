@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalhes da empresa')}"></head>
+<body>
+    <a href="#conteudo" class="visually-hidden-focusable position-absolute bg-white p-3">Ir para o conteúdo</a>
+    <aside th:replace="~{fragments/layout :: menu}"></aside>
+
+    <div class="app-content d-flex flex-column">
+        <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+        <main class="p-3 p-md-4 p-xl-5" id="conteudo">
+            <div th:replace="~{fragments/layout :: mensagens}"></div>
+            <a class="text-secondary d-inline-block mb-3" th:href="@{/empresas}">Voltar às empresas</a>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="h2" th:text="${empresa.razaoSocial}">Empresa</h1>
+                    <p class="text-secondary mb-0">Informações cadastrais da empresa.</p>
+                </div>
+                <a class="btn btn-primary" th:href="@{/empresas/{id}/editar(id=${empresa.idEmpresa})}">Editar empresa</a>
+            </div>
+
+            <section class="card">
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 mb-2">Razão social</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.razaoSocial}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">Nome fantasia</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.nomeFantasia ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">CNPJ</dt>
+                        <dd class="col-sm-8 mb-3" th:text="${empresa.cnpj ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">Segmento de mercado</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.segmentoMercado ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">Área de atuação</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.areaAtuacaoEmpresa ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">E-mail</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.email ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">CEP</dt>
+                        <dd class="col-sm-8 mb-3" th:text="${empresa.cepEmpresa ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">Endereço</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.endereco ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4 mb-2">LinkedIn</dt>
+                        <dd class="col-sm-8 mb-3 text-break" th:text="${empresa.linkedin ?: '-'}">-</dd>
+                    </dl>
+                </div>
+            </section>
+
+            <form class="mt-4" method="post"
+                  th:action="@{/empresas/{id}/excluir(id=${empresa.idEmpresa})}"
+                  data-confirmar="Deseja realmente excluir esta empresa? Esta ação não pode ser desfeita.">
+                <button type="submit" class="btn btn-outline-danger">Excluir empresa</button>
+            </form>
+        </main>
+
+        <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    </div>
+    <th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
